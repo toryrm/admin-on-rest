@@ -2,6 +2,7 @@ import React from 'react';
 import assert from 'assert';
 import { shallow } from 'enzyme';
 import { File, FileReader } from 'file-api';
+import { spy } from 'sinon';
 
 import { ImageField } from '../field/ImageField';
 import { FileInput } from './FileInput';
@@ -26,6 +27,99 @@ describe('<FileInput />', () => {
         );
 
         assert.equal(wrapper.find('Dropzone').length, 1);
+    });
+
+    it('should correctly update upon drop when allowing a single file', () => {
+        const onChange = spy();
+
+        const wrapper = shallow((
+            <FileInput
+                input={{
+                    value: {
+                        src: 'b64_picture',
+                    },
+                    onChange,
+                }}
+                translate={x => x}
+                source="src"
+            />
+        ));
+
+        wrapper.instance().onDrop([{ preview: 'new_b64_picture' }]);
+
+        assert.deepEqual(onChange.args[0][0], { preview: 'new_b64_picture' });
+    });
+
+    it('should correctly update upon removal when allowing a single file', () => {
+        const onChange = spy();
+
+        const wrapper = shallow((
+            <FileInput
+                input={{
+                    value: {
+                        src: 'b64_picture',
+                    },
+                    onChange,
+                }}
+                translate={x => x}
+                source="src"
+            />
+        ));
+
+        wrapper.instance().onRemove({ src: 'b64_picture' })();
+        assert.deepEqual(onChange.args[0][0], null);
+    });
+
+    it('should correctly update upon drop when allowing multiple files', () => {
+        const onChange = spy();
+
+        const wrapper = shallow((
+            <FileInput
+                input={{
+                    value: [
+                        { src: 'b64_picture' },
+                        { src: 'another_b64_picture' },
+                    ],
+                    onChange,
+                }}
+                translate={x => x}
+                source="pictures"
+                multiple
+            />
+        ));
+
+        wrapper.instance().onDrop([{ preview: 'new_b64_picture' }]);
+
+        assert.deepEqual(onChange.args[0][0], [
+            { src: 'b64_picture' },
+            { src: 'another_b64_picture' },
+            { preview: 'new_b64_picture' },
+        ]);
+    });
+
+    it('should correctly update upon removal when allowing multiple files', () => {
+        const onChange = spy();
+
+        const wrapper = shallow((
+            <FileInput
+                input={{
+                    value: [
+                        { src: 'b64_picture' },
+                        { src: 'another_b64_picture' },
+                    ],
+                    onChange,
+                }}
+                translate={x => x}
+                source="pictures"
+                multiple
+            />
+        ));
+
+        wrapper.instance().onRemove({ src: 'another_b64_picture' })();
+
+        assert.deepEqual(onChange.args[0][0], [
+            { src: 'b64_picture' },
+        ]);
     });
 
     it('should display correct label depending multiple property', () => {
