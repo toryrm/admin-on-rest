@@ -69,7 +69,7 @@ export class FileInput extends Component {
         this.setState({ files: files.map(this.transformFile) });
     }
 
-    onDrop = (files) => {
+    onDrop = files => {
         const updatedFiles = this.props.multiple
             ? [...this.state.files, ...files.map(this.transformFile)]
             : [...files.map(this.transformFile)];
@@ -81,7 +81,7 @@ export class FileInput extends Component {
         } else {
             this.props.input.onChange(updatedFiles[0]);
         }
-    }
+    };
 
     onRemove = file => () => {
         const filteredFiles = this.state.files.filter(
@@ -95,7 +95,7 @@ export class FileInput extends Component {
         } else {
             this.props.input.onChange(null);
         }
-    }
+    };
 
     // turn a browser dropped file structure into expected structure
     transformFile = file => {

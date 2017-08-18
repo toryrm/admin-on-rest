@@ -32,7 +32,7 @@ describe('<FileInput />', () => {
     it('should correctly update upon drop when allowing a single file', () => {
         const onChange = spy();
 
-        const wrapper = shallow((
+        const wrapper = shallow(
             <FileInput
                 input={{
                     value: {
@@ -43,7 +43,7 @@ describe('<FileInput />', () => {
                 translate={x => x}
                 source="src"
             />
-        ));
+        );
 
         wrapper.instance().onDrop([{ preview: 'new_b64_picture' }]);
 
@@ -53,7 +53,7 @@ describe('<FileInput />', () => {
     it('should correctly update upon removal when allowing a single file', () => {
         const onChange = spy();
 
-        const wrapper = shallow((
+        const wrapper = shallow(
             <FileInput
                 input={{
                     value: {
@@ -64,7 +64,7 @@ describe('<FileInput />', () => {
                 translate={x => x}
                 source="src"
             />
-        ));
+        );
 
         wrapper.instance().onRemove({ src: 'b64_picture' })();
         assert.deepEqual(onChange.args[0][0], null);
@@ -73,7 +73,7 @@ describe('<FileInput />', () => {
     it('should correctly update upon drop when allowing multiple files', () => {
         const onChange = spy();
 
-        const wrapper = shallow((
+        const wrapper = shallow(
             <FileInput
                 input={{
                     value: [
@@ -86,7 +86,7 @@ describe('<FileInput />', () => {
                 source="pictures"
                 multiple
             />
-        ));
+        );
 
         wrapper.instance().onDrop([{ preview: 'new_b64_picture' }]);
 
@@ -100,7 +100,7 @@ describe('<FileInput />', () => {
     it('should correctly update upon removal when allowing multiple files', () => {
         const onChange = spy();
 
-        const wrapper = shallow((
+        const wrapper = shallow(
             <FileInput
                 input={{
                     value: [
@@ -113,13 +113,11 @@ describe('<FileInput />', () => {
                 source="pictures"
                 multiple
             />
-        ));
+        );
 
         wrapper.instance().onRemove({ src: 'another_b64_picture' })();
 
-        assert.deepEqual(onChange.args[0][0], [
-            { src: 'b64_picture' },
-        ]);
+        assert.deepEqual(onChange.args[0][0], [{ src: 'b64_picture' }]);
     });
 
     it('should display correct label depending multiple property', () => {
